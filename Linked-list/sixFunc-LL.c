@@ -1,3 +1,10 @@
+/*
+ *this file only contains the code for single linked list
+ * []-->[]-->[]-->null
+ * only implementation's are "NEXT" pointers
+ *
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -6,15 +13,17 @@
 
 #define and &&
 #define or ||
+
 typedef struct Node
 {
 
-    
     int data;
     struct Node *next;
 } Node;
 
 int nodeSize = sizeof(Node);
+
+int sizeOfList = 0;
 
 Node *head = null;
 
@@ -24,36 +33,22 @@ Node *deleteAtBeg(Node *head);
 Node *insertAtEnd(Node *head, int data);
 Node *deleteAtEnd(Node *head);
 
-
-
+Node *insertAt(Node *head, int data, int position);
 
 void display(Node *head);
 
 int main()
 {
-    // head = insertAtEnd(head, 6666);
-    // head = insertAtEnd(head, 1166);
     head = insertAtBeg(head, 22);
+
     head = insertAtBeg(head, 212);
-    head = insertAtBeg(head, 212342);
-    head = insertAtBeg(head, 2156612);
-    // head = insertAtEnd(head, 6666);
-    // head = insertAtBeg(head, 4422);
-    // head = insertAtBeg(head, 122);
-    // head = insertAtEnd(head, 6666);
-    
-    display(head);
 
-    // head = deleteAtBeg(head);
+    head = insertAtBeg(head, 1);
 
-
-    head = deleteAtEnd(head);
-    head = deleteAtEnd(head);
-
-    head = deleteAtEnd(head);
-    head = deleteAtEnd(head);
+    head = insertAt(head, 255, 6);
 
     display(head);
+
     return 0;
 }
 
@@ -72,6 +67,7 @@ Node *insertAtBeg(Node *head, int data)
     {
         newNode->next = null;
         head = newNode;
+        sizeOfList++;
         return head;
     }
 
@@ -80,6 +76,7 @@ Node *insertAtBeg(Node *head, int data)
 
         newNode->next = head;
         head = newNode;
+        sizeOfList++;
         return head;
     }
 }
@@ -88,9 +85,8 @@ Node *insertAtEnd(Node *head, int data)
 {
 
     if (head == null)
-    {
+
         return insertAtBeg(head, data);
-    }
 
     Node *newNode = malloc(nodeSize);
 
@@ -106,9 +102,7 @@ Node *insertAtEnd(Node *head, int data)
         Node *temp = head;
 
         while (temp->next != null)
-        {
             temp = temp->next;
-        }
 
         newNode->data = data;
 
@@ -116,8 +110,59 @@ Node *insertAtEnd(Node *head, int data)
 
         newNode->next = null;
 
+        sizeOfList++;
+
         return head;
     }
+}
+
+Node *insertAt(Node *head, int data, int position)
+{
+    if (position < sizeOfList)
+    {
+
+        puts("trying to insert at out of bound; will default to insertion at end .");
+
+        return insertAtEnd(head, data);
+    }
+
+    if (head == null)
+        return insertAtBeg(head, data);
+
+    Node *newNode = malloc(nodeSize);
+
+    if (newNode == null)
+    {
+        puts("mem alloc failed . ");
+        return head;
+    }
+
+    Node *temp = head;
+
+    newNode->data = data;
+
+    int i = 0;
+
+    while (i++ < position)
+        temp = temp->next;
+
+    print(" temp ---> %p ", temp);
+
+    if (temp->next == null)
+    {
+
+        print("last node insertion \n");
+
+        return insertAtEnd(head, data);
+    }
+
+    newNode->next = temp->next;
+
+    temp->next = newNode;
+
+    sizeOfList++;
+
+    return head;
 }
 
 Node *deleteAtBeg(Node *head)
@@ -137,6 +182,8 @@ Node *deleteAtBeg(Node *head)
 
         free(temp);
 
+        sizeOfList--;
+
         return head;
     }
 }
@@ -148,22 +195,25 @@ Node *deleteAtEnd(Node *head)
         puts("list is empty");
         return null;
     }
+
     if (head->next == null)
     {
         free(head);
+        sizeOfList--;
 
         return head = null;
     }
+
     Node *temp = head;
 
     while (temp->next->next != null)
-    {
+
         temp = temp->next;
-    }
 
     free(temp->next);
-    temp->next = null;
 
+    temp->next = null;
+    sizeOfList--;
     return head;
 }
 
@@ -177,11 +227,11 @@ void display(Node *head)
     }
 
     Node *temp = head;
-    puts("\n\n");
+    puts("\n\n\t");
     while (temp != null)
     {
-        printf("\e[0;37mdata --> \e[0;33m %d\t|", temp->data);
-        printf(" \e[0;37m next--> \e[0;34m  %p\n ", temp->next);
+        printf("\e[0;37mdata --> \e[1;33m %d\t|", temp->data);
+        printf("\e[0;37m next--> \e[1;34m  %p\n \t", temp->next);
         temp = temp->next;
     }
 }
