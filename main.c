@@ -1,194 +1,98 @@
-#include <stdio.h>
 #include <stdlib.h>
 
-// #define null NULL
+#include <stdio.h>
+#define cube(c) c *c *c
 
-typedef struct node
-{
-    int value;
-
-    struct node *next;
-} node;
-
-node *head = NULL;
-
-int nodeSize = sizeof(node);
-
-node *insertAtBeg(int data);
-
-node *insertAtEnd(int data);
-
-node *deleteAtBeg();
-
-node *deleteAtEnd();
-
-void displayList();
-
-
-int main(void)
+#define arrLength(arr) sizeof(arr) / sizeof(arr[0])
+void swap(int *a, int *b);
+void swap2(int *a, int *b);
+// void swap3(int **a, int **b);
+void swapArr(int a[]);
+typedef struct myInt
 {
 
-    printf("'hello John ! '\n");
+    unsigned k;
+    long long int h;
 
-    head = insertAtBeg(25);  // 2
-    head = insertAtBeg(125); // 1
+} myInt;
 
-    head = insertAtEnd(1452); // 3
+int main()
+{
 
-    head = insertAtBeg(225);
-    head = insertAtBeg(325);
+    int a = 66;
+    int b = 45;
 
-    // head = deleteAtBeg();
-    head = deleteAtEnd();
+    int *aa = &a;
 
-    displayList();
+    myInt arr[10];
 
+    int len = arrLength(arr); /* (sizeof(arr) / sizeof(*(arr + 0))); */
+    printf("%d \n", len);
+    for (int i = 0; i < 10; i++)
+    {
+        arr[10].h = i * i;
+        arr[10].k = i * i * i;
+    }
+
+    printf(" main fn --- %p %p \n ", &a, &b);
+    // printf("%p  %d ", aa, *aa); // dereferencing the  pointer using the * operator
+    // swap(&b, &a);
+    // printf(" %d %d ", a, b);
+    // int ad[] = {1, 2, 3};
+    int *bb = &b;
+    // swapArr(ad);
+    // swap3(&aa, &bb);
+    // swap2(&a, &b);
+    printf(" main fn --- %p %p \n ", &a, &b);
+
+    // printf("%d %d ", *(ad + 0), *(ad + 1));
+    printf("%d %d ", 2, cube(2));
     return 0;
 }
-
-node *insertAtBeg(int data)
+void swap2(int *a, int *b)
 {
-    node *newNode = malloc(nodeSize);
-    newNode->value = data;
 
-    if (newNode == NULL)
-    {
-        printf("mem allocation failed ");
-        return NULL;
-    }
-    if (head == NULL)
-    {
+    // this code is modifying the copy of the reference pointer variables stored locally in the scope of this function
 
-        head = newNode;
-        newNode->next = NULL;
-        return head;
-    }
+    /*  main fn before swap fn--- 0061FF18 0061FF14
+    in the swap before 0061FF18 0061FF14
+     in the swap after 0061FF14 0061FF18
+ main fn after swap fn --- 0061FF18 0061FF14  */
+    printf("in the swap before %p %p \n", a, b);
 
-    else
-    {
+    int *temp = a;
 
-        newNode->next = head;
-        head = newNode;
-        return head;
-    }
+    a = b;
+
+    b = temp;
+
+    printf(" in the swap after %p %p \n", a, b);
 }
-
-node *insertAtEnd(int data)
+void swap(int *a, int *b)
 {
 
-    if (head == NULL)
-        return insertAtBeg(data);
+    int temp = *a;
 
-    node *newNode = malloc(nodeSize);
-    newNode->value = data;
-    if (newNode == NULL)
-    {
-        printf("mem allocation failed ! \n");
-        return head;
-    }
-    if (head->next == NULL)
-    {
-        head->next = newNode;
-        newNode->next = NULL;
+    *a = *b;
 
-        return head;
-    }
-
-    else
-    {
-        node *temp = head;
-
-        while (temp->next != NULL)
-
-            temp = temp->next;
-
-        temp->next = newNode;
-
-        newNode->next = NULL;
-
-        return head;
-    }
+    *b = temp;
 }
-
-node *deleteAtBeg()
+/* void swap3(int **a, int **b)
 {
-    if (head == NULL)
-    {
-        puts("no node in the list ");
+    printf("in the swap before %p %p \n", a, b);
 
-        return NULL;
-    }
-    node *temp = head;
+    int **temp = a;
 
-    if (head->next == NULL)
-    {
-        printf("node data that was removed  --> %d, head data --> No data present\n", temp->value);
+    *a = *b;
+    *b = *temp;
 
-        printf("this list is now empty ! \n");
-
-        free(temp);
-
-        return head = NULL;
-    }
-    
-    head = head->next;
-
-    printf("node data that was removed  --> %d, head data --> %d \n", temp->value, head->value);
-
-    free(temp);
-
-    return head;
-}
-
-node *deleteAtEnd()
+    printf("in the swap before %p %p \n", a, b);
+} */
+void swapArr(int a[])
 {
-    if (head == NULL)
-    {
-        printf("the list is empty ! \n");
-        return head;
-    }
+    int temp = a[0];
 
-    node *temp = head;
+    a[0] = a[1];
 
-    if (head->next == NULL)
-    {
-        printf("last node is empty ! \n ");
-
-        free(temp);
-        return head = NULL;
-    }
-
-    else
-    {
-        while (temp->next->next != NULL)
-
-            temp = temp->next;
-
-        printf(" node with data %d  deleted \n ", temp->next->value);
-
-        free(temp->next);
-
-        temp->next = NULL;
-        return head;
-    }
-}
-
-void displayList()
-{
-
-    if (head == NULL)
-    {
-        printf("this list is empty ! \n");
-
-        return;
-    }
-    node *temp = head;
-    while (temp != NULL )
-
-    {
-
-        printf("\t\tdata --->%d ||next -->%p\n ", temp->value, temp->next);
-        temp = temp->next;
-        
-    }
+    a[1] = temp;
 }

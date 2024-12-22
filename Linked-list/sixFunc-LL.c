@@ -2,7 +2,7 @@
  *this file only contains the code for single linked list
  * []-->[]-->[]-->null
  * only implementation's are "NEXT" pointers
- *
+ * functions that are basic operation in linked list data structure
  */
 
 #include <stdio.h>
@@ -16,16 +16,15 @@
 
 typedef struct Node
 {
-
     int data;
     struct Node *next;
 } Node;
 
+Node *head = null;
+
 int nodeSize = sizeof(Node);
 
 int sizeOfList = 0;
-
-Node *head = null;
 
 Node *insertAtBeg(Node *head, int data);
 Node *deleteAtBeg(Node *head);
@@ -39,13 +38,12 @@ void display(Node *head);
 
 int main()
 {
+
     head = insertAtBeg(head, 22);
-
     head = insertAtBeg(head, 212);
-
     head = insertAtBeg(head, 1);
 
-    head = insertAt(head, 255, 6);
+    head = insertAt(head, 255, 3);
 
     display(head);
 
@@ -118,9 +116,12 @@ Node *insertAtEnd(Node *head, int data)
 
 Node *insertAt(Node *head, int data, int position)
 {
-    if (position < sizeOfList)
-    {
+    if (position == 1 or position < 1)
 
+        return insertAtBeg(head, data);
+
+    if (position > sizeOfList) // careful with comparison
+    {
         puts("trying to insert at out of bound; will default to insertion at end .");
 
         return insertAtEnd(head, data);
@@ -141,10 +142,13 @@ Node *insertAt(Node *head, int data, int position)
 
     newNode->data = data;
 
-    int i = 0;
+    int i = 1;
 
-    while (i++ < position)
+    while (i <= position && position < sizeOfList)
+    {
         temp = temp->next;
+        i++;
+    }
 
     print(" temp ---> %p ", temp);
 
@@ -215,6 +219,10 @@ Node *deleteAtEnd(Node *head)
     temp->next = null;
     sizeOfList--;
     return head;
+}
+
+Node *deleteAt(Node *head, int position)
+{
 }
 
 void display(Node *head)
