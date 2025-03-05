@@ -28,5 +28,4 @@ function fibO(n) {
 // function x(i) return [2i]
 fibO(10);
 
-console.log(
-    fibCal[3]);
+console.log(fibCal[3]);
